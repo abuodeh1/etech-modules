@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:jpa="http://www.springframework.org/schema/data/jpa" 
+	   xmlns:p="http://www.springframework.org/schema/p"
+	   xmlns:tx="http://www.springframework.org/schema/tx"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+						   http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd
+						   http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
+						   http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+	<!-- Scans for components that will be auto-registered as Spring beans -->
+	<context:component-scan base-package="ecapture;omni" />
+	
+	<!-- Scans for repositories that will be auto-registered -->
+	<jpa:repositories base-package="ecapture.model" entity-manager-factory-ref="eCaptureEntityManagerFactory" transaction-manager-ref="eCaptureTransactionManager" />
+	<jpa:repositories base-package="omni.model" entity-manager-factory-ref="omniDocsEntityManagerFactory" transaction-manager-ref="omniDocsTransactionManager" />
+	
+	<!-- Activates various annotations to be detected in bean classes e.g: @Autowired -->
+	<context:annotation-config />
+
+	<!-- Properties Files -->
+	<bean
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:db-config.properties</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- Datasource -->
+ 	<bean id="eCaptureOracleConfig" class="com.zaxxer.hikari.HikariConfig">
+		<property name="poolName" value="oracleSpringHikariCP" />
+		<property name="connectionTestQuery" value="SELECT 1 FROM DUAL" />
+		<property name="dataSourceClassName" value="${ecapture.driverClassName}" />
+		<property name="maximumPoolSize" value="${ecapture.maximumPoolSize}" />
+		<property name="idleTimeout" value="${ecapture.idleTimeout}" />
+		<property name="dataSourceProperties">
+			<props>
+				<prop key="url">${ecapture.jdbcUrl}</prop>
+				<prop key="user">${ecapture.user}</prop>
+				<prop key="password">${ecapture.password}</prop>
+				
+			</props>
+		</property>
+	</bean>
+
+	<bean id="eCaptureOracle" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
+		<constructor-arg ref="eCaptureOracleConfig" />
+	</bean>
+
+	<bean id="omniDocsOracleConfig" class="com.zaxxer.hikari.HikariConfig">
+		<property name="poolName" value="omniSpringHikariCP" />
+		<property name="connectionTestQuery" value="SELECT 1 FROM DUAL" />
+		<property name="dataSourceClassName" value="${omnidocs.driverClassName}" />
+		<property name="maximumPoolSize" value="${omnidocs.maximumPoolSize}" />
+		<property name="idleTimeout" value="${omnidocs.idleTimeout}" />
+		<property name="dataSourceProperties">
+			<props>
+				<prop key="url">${omnidocs.jdbcUrl}</prop>
+				<prop key="user">${omnidocs.user}</prop>
+				<prop key="password">${omnidocs.password}</prop>
+				
+			</props>
+		</property>
+	</bean>
+	
+	<bean id="omniDocsOracle" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
+		<constructor-arg ref="omniDocsOracleConfig" />
+	</bean>
+	
+	<!-- Persistence Unit Manager -->
+     <bean id="persistenceUnitManager" class="org.springframework.orm.jpa.persistenceunit.DefaultPersistenceUnitManager">
+		<!-- <property name="persistenceXmlLocations">
+			<list>
+				<value>classpath*:META-INF/persistence.xml</value>
+			</list>
+		</property>	
+		<property name="defaultPersistenceUnitName" value="eCaptureOracle" /> -->
+		<!-- <property name="dataSources">
+            <map>
+                 <entry key="eCaptureOracleConfig" value-ref="eCaptureOracle" />
+                 <entry key="omniDocsOracleConfig" value-ref="omniDocsOracle" />
+            </map>
+        </property>
+		<property name="defaultDataSource" ref="eCaptureOracle" /> -->
+        
+	</bean>
+
+	<!-- eCapture EntityManagerFactory -->
+	<bean id="eCaptureEntityManagerFactory"
+		  class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean" 
+		  p:persistenceUnitManager-ref="persistenceUnitManager"
+		  p:persistenceUnitName="eCaptureOracle"
+		  p:dataSource-ref="eCaptureOracle">
+		  
+		<property name="jpaVendorAdapter">
+			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+				<property name="generateDdl" value="true" />
+				<property name="showSql" value="true" />
+				<property name="databasePlatform" value="org.hibernate.dialect.OracleDialect" />
+			</bean>
+		</property>
+	
+		<property name="jpaProperties">
+			<props>
+				<prop key="hibernate.hbm2dll.auto">update</prop>
+	        	<prop key="hibernate.format_sql">false</prop>
+	        	<prop key="jpaDialect">org.springframework.orm.jpa.vendor.HibernateJpaDialect</prop>
+			</props>
+		</property>
+		
+	</bean>
+
+	<!-- eCapture Transaction -->
+	<tx:annotation-driven transaction-manager="eCaptureTransactionManager" />
+	<bean id="eCaptureTransactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="eCaptureEntityManagerFactory" />
+	</bean>
+
+
+	<!-- Omni EntityManagerFactory -->
+	<bean id="omniDocsEntityManagerFactory"
+		  class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean" 
+		  p:persistenceUnitManager-ref="persistenceUnitManager"
+		  p:persistenceUnitName="omniDocsOracle"
+		  p:dataSource-ref="omniDocsOracle">
+		  
+		<property name="jpaVendorAdapter">
+			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+				<property name="generateDdl" value="true" />
+				<property name="showSql" value="true" />
+				<property name="databasePlatform" value="org.hibernate.dialect.OracleDialect" />
+			</bean>
+		</property>
+	
+		<property name="jpaProperties">
+			<props>
+				<prop key="hibernate.hbm2dll.auto">update</prop>
+	        	<prop key="hibernate.format_sql">false</prop>
+	        	<prop key="jpaDialect">org.springframework.orm.jpa.vendor.HibernateJpaDialect</prop>
+			</props>
+		</property>
+		
+	</bean>
+
+	<!-- Omni Transactions -->
+	<tx:annotation-driven transaction-manager="omniDocsTransactionManager" />
+	<bean id="omniDocsTransactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="omniDocsEntityManagerFactory" />
+	</bean>
+</beans>

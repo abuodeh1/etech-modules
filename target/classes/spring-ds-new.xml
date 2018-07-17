@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+						   http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+						   http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
+						   http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+
+	<!-- Properties Files -->
+	<bean
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:db-config.properties</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- eCapture H2 EntityManagerFactory -->
+	<bean id="eCaptureH2EntityManagerFactory"
+		class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.connection.driver_class">${h2.driverClassName}</prop>
+				<prop key="hibernate.connection.url">${h2.jdbcUrl}</prop>
+				<prop key="hibernate.connection.username">${h2.user}</prop>
+				<prop key="hibernate.connection.password">${h2.password}</prop>
+				<prop key="hibernate.default_schema">${h2.schema}</prop>
+				<prop key="hibernate.hbm2dll.auto">${h2.hbm2dll}</prop>
+				<prop key="hibernate.format_sql">${h2.formatSQL}</prop>
+				<prop key="hibernate.dialect">org.hibernate.dialect.H2Dialect</prop>
+				<prop key="hibernate.enable_lazy_load_no_trans">true</prop>
+				<prop key="hibernate.current_session_context_class">thread</prop>
+				
+				<prop key="hibernate.hikari.minimumIdle">5</prop>
+      			<prop key="hibernate.hikari.maximumPoolSize">10</prop>
+      			<prop key="hibernate.hikari.idleTimeout">30000</prop>
+      			<prop key="hibernate.connection.provider_class">org.hibernate.hikaricp.internal.HikariCPConnectionProvider</prop>
+			</props>
+		</property>
+
+	</bean>
+
+	<!-- eCapture H2 Transaction -->
+	<tx:annotation-driven transaction-manager="eCaptureH2TransactionManager" />
+		
+	<bean id="eCaptureH2TransactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+		<property name="sessionFactory"	ref="eCaptureH2EntityManagerFactory" />
+	</bean>
+	
+</beans>
