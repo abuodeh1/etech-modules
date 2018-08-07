@@ -18,14 +18,14 @@
 
 	<import resource="classpath:/security-module-config.xml"/>
 	
-	<security:http use-expressions="true" auto-config='true' disable-url-rewriting="false">
+	 <security:http use-expressions="true" auto-config='true' disable-url-rewriting="false">
 		<!-- <intercept-url pattern="/**" access="isAuthenticated()" /> -->
 		<!-- <intercept-url pattern="/**" access="isAnonymous()" /> -->
 		<security:intercept-url pattern="/login*" access="permitAll" />
 		<!-- <intercept-url pattern="/**" access="hasAuthority('ROLE_USER')" /> -->
 		<security:intercept-url pattern="/index.xhtml" access="isAnonymous()" />
-		<security:intercept-url pattern="/**" access="isAuthenticated()" />
-		<!-- <security:intercept-url pattern="/**" access="permitAll" /> -->
+		<!-- <security:intercept-url pattern="/**" access="isAuthenticated()" /> -->
+		<security:intercept-url pattern="/**" access="permitAll" />
 
 		<!-- login-processing-url="/j_spring_security_check" -->
 		<security:form-login login-page="/login.xhtml" default-target-url="/login.xhtml"

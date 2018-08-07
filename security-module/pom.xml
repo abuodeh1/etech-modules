@@ -11,13 +11,9 @@
 	
 	<artifactId>security-module</artifactId>
 
-	<properties>
-		<spring.version>5.0.3.RELEASE</spring.version>
-	</properties>
-
 	<dependencies>
 		<dependency>
-			<groupId>etech.core</groupId>
+			<groupId>etech-modules</groupId>
 			<artifactId>core-module</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
