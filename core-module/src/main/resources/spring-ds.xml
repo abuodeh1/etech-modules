@@ -11,6 +11,17 @@
 						   http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
 
 
+	<bean id="persistenceUnitManager" class="de.cware.cweb.webapp.jpa.MergingPersistenceUnitManager">
+        <property name="persistenceXmlLocations">
+            <list>
+                <value>classpath*:META-INF/persistence.xml</value>
+            </list>
+        </property>
+       <!--  <property name="defaultDataSource" ref="dataSource"/> -->
+    </bean>
+    
+    <context:load-time-weaver aspectj-weaving="on"/>
+    
 	<!-- Properties Files -->
 	<bean
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">

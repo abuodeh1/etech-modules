@@ -11,6 +11,8 @@
 		<artifactId>etech-modules</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
+	
+	<packaging>pom</packaging>
 
 	<dependencies>
  		<dependency>
@@ -135,5 +137,5 @@
 			</plugin>
 		</plugins>
 	</build>
-	<packaging>war</packaging>
+	
 </project>
