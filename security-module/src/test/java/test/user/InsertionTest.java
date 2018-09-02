@@ -28,8 +28,8 @@ public class InsertionTest {
 
 			user = new User();
 
-			user.setUserNameAr("User " + String.valueOf((int) (Math.random() * 100)));
-			user.setUserNameEn("User " + String.valueOf((int) (Math.random() * 100)));
+			user.setUserNameAr("User " + String.valueOf((int) (Math.random() * 1000)));
+			user.setUserNameEn("User " + String.valueOf((int) (Math.random() * 1000)));
 
 			Calendar current = Calendar.getInstance();
 			current.add(Calendar.YEAR, 5);
@@ -40,13 +40,13 @@ public class InsertionTest {
 			user.setUserNickname("User" + String.valueOf((int) (Math.random() * 100)));
 			user.setUserPassword("123");
 
-			List<Authority> authorities = new ArrayList<>();
-			authorities
-					.add(test.authority.InsertionTest.authorities.get(test.authority.InsertionTest.authorities.size()));
-
-			assertNotNull(authorities);
-
-			user.setAuthorities(authorities);
+//			List<Authority> authorities = new ArrayList<>();
+//			authorities
+//					.add(test.authority.InsertionTest.authorities.get(test.authority.InsertionTest.authorities.size()));
+//
+//			assertNotNull(authorities);
+//
+//			user.setAuthorities(authorities);
 
 			userService.save(user);
 

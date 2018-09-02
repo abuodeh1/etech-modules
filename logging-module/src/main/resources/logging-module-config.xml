@@ -7,35 +7,24 @@
 	   xmlns:tx="http://www.springframework.org/schema/tx"
 	   xmlns:security="http://www.springframework.org/schema/security"
 	   xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	   xmlns:aop="http://www.springframework.org/schema/aop"
 	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 						   http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
 						   http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
 						   http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
 						   http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
-						   http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd">
-	   
-	<!-- Activates various annotations to be detected in bean classes e.g: @Autowired -->
+						   http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd
+						   http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+	<aop:aspectj-autoproxy />	
+
 	<context:annotation-config />
 	
-	<!-- Scans for components that will be auto-registered as Spring beans -->
-	<context:component-scan base-package="etech.security.*" />
-	
+	<context:component-scan base-package="etech.logging.*"/>
+
 	<!-- Scans for repositories that will be auto-registered -->
-	<jpa:repositories base-package="etech.security.repositories" entity-manager-factory-ref="eCaptureH2EntityManagerFactory" transaction-manager-ref="eCaptureH2TransactionManager" />
-	 
+	<jpa:repositories base-package="etech.logging.repositories" entity-manager-factory-ref="eCaptureH2EntityManagerFactory" transaction-manager-ref="eCaptureH2TransactionManager" />
+	
 	<import resource="classpath:/spring-config.xml"/>
-
-	<import resource="classpath:/logging-module-config.xml"/>
 	
-	<bean id="customUserDetailsService"	class="etech.security.custom.CustomUserDetailsService" />
-
-	<security:authentication-manager>
-		<security:authentication-provider user-service-ref="customUserDetailsService">
-			<security:password-encoder ref="passwordEncoder" />
-		</security:authentication-provider>
-	</security:authentication-manager>
-	
-	<bean id="passwordEncoder"
-		class="org.springframework.security.crypto.password.NoOpPasswordEncoder" />
-		
 </beans>
