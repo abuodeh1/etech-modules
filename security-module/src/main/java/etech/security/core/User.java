@@ -21,6 +21,10 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 
+import org.hibernate.envers.AuditReader;
+import org.hibernate.envers.AuditReaderFactory;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.RelationTargetAuditMode;
 import org.springframework.security.core.userdetails.UserDetails;
 
 /**
@@ -35,6 +39,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 })
 @Entity
 @NamedEntityGraph(name = "graph.User.authorities", attributeNodes = @NamedAttributeNode("authorities"))
+@Audited
 public class User implements UserDetails{
 
 	private static final long serialVersionUID = 1L;
@@ -69,27 +74,33 @@ public class User implements UserDetails{
 	@Column(nullable = false)
 	private Date userPasswordExpiryDate;
 	
+	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
 	private byte[] userSignatureImage;
 	private String userSignaturePasword;
 	
+	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
 	@OneToOne
     @JoinColumn(name = "SCHEDULEID")
 	public Schedule schedule;
 	
+	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
 	@ManyToOne
 	@JoinColumn(name = "USERMANAGERID")
 	private User manager;
 	
+	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
 	@OneToOne
     @JoinColumn(name = "PROVIDERID")
 	public Provider provider;
 	
+	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
 	@ManyToMany(cascade = CascadeType.DETACH, fetch = FetchType.EAGER)
 	@JoinTable(name="USERAUTHORITIES", 
 				 joinColumns = @JoinColumn(name = "USERID"),
 					inverseJoinColumns = @JoinColumn(name = "AUTHORITYID"))
 	private List<Authority> authorities;
 	
+	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
 	@ManyToMany(cascade = CascadeType.DETACH, mappedBy="users")
 	private List<Group> groups;
 	

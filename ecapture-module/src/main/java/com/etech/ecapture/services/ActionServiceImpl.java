@@ -26,5 +26,10 @@ public class ActionServiceImpl{
 		return actionRepo.findByActionName(token);
 	}
 	
+	
+	public List<Action> findAll() {
+		
+		return actionRepo.findAll();
+	}
 
 }

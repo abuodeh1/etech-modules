@@ -40,7 +40,7 @@ public class SecurityModuleTest {
 		 */
 		
 		UserService userService = cxt.getBean(UserService.class);
-		AuthorityService authorityService = cxt.getBean(AuthorityService.class);
+//		AuthorityService authorityService = cxt.getBean(AuthorityService.class);
 		
 		User user = null;
 		
@@ -60,19 +60,29 @@ public class SecurityModuleTest {
 			user.setUserNickname("User" + String.valueOf((int) (Math.random() * 100)));
 			user.setUserPassword("123");
 			
-			List<Authority> authorities = new ArrayList<>();
-			authorities.add(authorityService.getAuthorityByAuthorityID(87));
+//			List<Authority> authorities = new ArrayList<>();
+//			authorities.add(authorityService.getAuthorityByAuthorityID(87));
 			
-			assertNotNull(authorities);
-			
-			user.setAuthorities(authorities);
+//			assertNotNull(authorities);
+//			
+//			user.setAuthorities(authorities);
 						
-			userService.save(user);
 			
-			assertNotNull(user.getUserID());
+
+		//	userService.save(user);
+			
+			
+	//		assertNotNull(user.getUserID());
 
 
 		}
+		
+		User edited = userService.getUserByUserID(234);
+		edited.setUserNameAr("محمد");
+		userService.save(edited);
+		
+		userService.getAudited(edited.getUserID()).forEach(System.out::println);
+		
 	}
 
 }

@@ -17,7 +17,7 @@
 	
 	<!-- Activates various annotations to be detected in bean classes e.g: @Autowired -->
 	<context:annotation-config />
-	
+
 	<!-- Scans for components that will be auto-registered as Spring beans -->
 	<context:component-scan base-package="etech.security.*" />
 	

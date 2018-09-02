@@ -1,5 +1,6 @@
 package etech.security.services;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -7,7 +8,10 @@ import java.util.Map;
 import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
 
+import org.hibernate.envers.AuditReader;
+import org.hibernate.envers.AuditReaderFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -113,6 +117,21 @@ public class UserService {
 
 		
 		return entityManager.find(User.class, userID, hints).getAuthorities();
+	}
+	
+	@Transactional
+	public List<User> getAudited(int userID){
+		
+		AuditReader auditReader = AuditReaderFactory.get(entityManager);
+		
+		List<User> users = new ArrayList<>();
+
+		List<Number> versions = auditReader.getRevisions(User.class, userID);
+		for (Number version : versions) {
+			users.add( auditReader.find(User.class, userID, version) );
+		}
+		
+		return users;
 	}
 
 	@PersistenceContext
