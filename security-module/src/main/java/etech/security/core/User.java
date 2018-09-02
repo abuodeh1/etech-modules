@@ -290,7 +290,6 @@ public class User implements UserDetails{
 //        return builder.build();
 
 	}
-	
 	@Override
 	public String getPassword() {
 		return userPassword;
@@ -303,7 +302,7 @@ public class User implements UserDetails{
 	public boolean isAccountNonExpired() {
 		return ( userExpiryDate.getTime() - new Date().getTime() > 0);
 	}
-	@Override
+
 	public boolean isAccountNonLocked() {
 		return !userLocked;
 	}

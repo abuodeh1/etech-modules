@@ -16,17 +16,15 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<hibernate.version>5.2.15.Final</hibernate.version>
 		<spring.version>5.0.4.RELEASE</spring.version>
+		<spring.security.version>5.0.4.RELEASE</spring.security.version>
 		<java.version>1.8</java.version>
 		<aspectj.version>1.9.1</aspectj.version>
 	</properties>
-	
-
 
 	<modules>
 		<module>security-module</module>
 		<module>web-module</module>
 		<module>ecapture-module</module>
-		
 		<module>logging-module</module>
 		<module>core-module</module>
 	</modules>
@@ -51,27 +49,11 @@
 					<skipTests>true</skipTests>
 				</configuration>
 			</plugin>
-			
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>aspectj-maven-plugin</artifactId>
-				<version>1.11</version>
-				<configuration>
-					<aspectLibraries>
-						<aspectLibrary>
-							<groupId>etech-modules</groupId>
-							<artifactId>logging-module</artifactId>
-						</aspectLibrary>
-					</aspectLibraries>
-				</configuration>
-				<executions>
-					<execution>
-						<goals>
-							<goal>compile</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
+			<!-- <plugin> <groupId>org.codehaus.mojo</groupId> <artifactId>aspectj-maven-plugin</artifactId> 
+				<version>1.11</version> <configuration> <aspectLibraries> <aspectLibrary> 
+				<groupId>etech-modules</groupId> <artifactId>logging-module</artifactId> 
+				</aspectLibrary> </aspectLibraries> </configuration> <executions> <execution> 
+				<goals> <goal>compile</goal> </goals> </execution> </executions> </plugin> -->
 		</plugins>
 	</build>
 </project>

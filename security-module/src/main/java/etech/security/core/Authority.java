@@ -101,6 +101,7 @@ public class Authority implements GrantedAuthority{
 				+ ", authorityDescAr=" + authorityDescAr + ", authorityDescEn=" + authorityDescEn + ", authorityNameAr="
 				+ authorityNameAr + ", authorityNameEn=" + authorityNameEn + "]";
 	}
+
 	@Override
 	public String getAuthority() {
 		return authorityCode;
